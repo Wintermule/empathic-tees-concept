@@ -259,7 +259,7 @@
     </div>
     
     <div class="mission-alert">
-        🚨 EMERGENCY MISSION: NEW PHONE BY MORNING 🚨
+        🚨 FRONTEND DEMO: EMPATHIC T-SHIRT CONCEPT 🚨
     </div>
     
     <div class="header">
@@ -462,8 +462,8 @@
                 timestamp: new Date().toISOString()
             };
             
-            // Send to backend (next step)
-            fetch('order.php', {
+            // Demo API endpoint (replace with your backend)
+            fetch('/api/demo/order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -472,11 +472,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert(`Order confirmed! Check ${email} for details. Order #${order.id}`);
-                } else {
-                    alert('Order failed. Please try again.');
-                }
+                alert(`Demo Order Created! Order #${order.id}\n\nIn production, this would:\n- Process payment via Stripe\n- Send to print fulfillment\n- Email confirmation to ${email}`);
+            })
+            .catch(error => {
+                // Demo mode - simulate success
+                alert(`Demo Order Created! Order #${order.id}\n\nThis is a frontend demonstration.\nConnect to your backend API for real orders.`);
             });
         }
         
