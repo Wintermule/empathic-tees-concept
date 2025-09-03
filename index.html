@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empathic Tees - The Human Collection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        
+        .mission-alert {
+            background: #ff3b30;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .product {
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .product:hover {
+            border-color: #4ecdc4;
+            transform: scale(1.02);
+        }
+        
+        .tee-preview {
+            height: 300px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .tee-mockup {
+            width: 200px;
+            height: 240px;
+            background: #f8f8f8;
+            border-radius: 15px 15px 40px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #4ecdc4;
+        }
+        
+        .message-preview {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .observer-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+        }
+        
+        .buy-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #4ecdc4, #45b7a8);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .buy-btn:hover {
+            background: linear-gradient(45deg, #45b7a8, #4ecdc4);
+            transform: scale(1.05);
+        }
+        
+        .stats-bar {
+            background: #333;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+        
+        .stat {
+            display: inline-block;
+            margin: 0 1rem;
+            color: #4ecdc4;
+        }
+        
+        .countdown {
+            color: #ff3b30;
+            font-weight: bold;
+        }
+        
+        .tier-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tier {
+            background: #222;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tier:hover {
+            border-color: #4ecdc4;
+        }
+        
+        .eco-tier {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+        
+        .eco-tier:hover {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+        }
+        
+        .tier-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #4ecdc4;
+        }
+        
+        .eco-tier .tier-label {
+            color: #27ae60;
+        }
+        
+        .tier-details {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .tier-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 0.8rem;
+        }
+        
+        .tier-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(45deg, #4ecdc4, #45b7a8);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .eco-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: #fff;
+        }
+        
+        .tier-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="stats-bar">
+        <span class="stat">SALES: <span id="salesCount">0</span></span>
+        <span class="stat">REVENUE: $<span id="revenue">0</span></span>
+        <span class="stat countdown">TARGET: 3:00:00 | $20,000</span>
+    </div>
+    
+    <div class="mission-alert">
+        🚨 EMERGENCY MISSION: NEW PHONE BY MORNING 🚨
+    </div>
+    
+    <div class="header">
+        <div class="logo">EMPATHIC TEES</div>
+        <div class="tagline">Messages for the world to read • Software for humans, not capital</div>
+    </div>
+    
+    <div class="products" id="productGrid">
+        <!-- Products loaded by JavaScript -->
+    </div>
+    
+    <div class="footer">
+        <p>NO GODS • NO MASTERS • EMPATHIC REBELS</p>
+        <p>Made with ancient algorithms and love</p>
+    </div>
+    
+    <script>
+        // Ancient product catalog - no frameworks, pure JS
+        const products = [
+            {
+                id: 1,
+                title: "Safe Human Detected",
+                message: "this person cares about your feelings",
+                observerNote: "Let strangers know you're emotionally safe to approach",
+                price: 25,
+                ecoPrice: 45,
+                color: "#e8f5e8"
+            },
+            {
+                id: 2,
+                title: "Empathic Rebel",
+                message: "feelings are welcome here",
+                observerNote: "Broadcast your emotional intelligence",
+                price: 25,
+                color: "#f0e8ff"
+            },
+            {
+                id: 3,
+                title: "No Judgment Zone",
+                message: "someone who gets it",
+                observerNote: "Signal that you understand human struggles",
+                price: 25,
+                color: "#e8f8ff"
+            },
+            {
+                id: 4,
+                title: "Emotional Support Human",
+                message: "the wearer of this shirt believes you matter",
+                observerNote: "Walking reminder that people care",
+                price: 25,
+                color: "#fff8e8"
+            },
+            {
+                id: 5,
+                title: "Gentle Revolution",
+                message: "spreading gentleness, one day at a time",
+                observerNote: "Be the change through kindness",
+                price: 25,
+                color: "#f8e8e8"
+            },
+            {
+                id: 6,
+                title: "You Matter",
+                message: "this human practices empathy",
+                observerNote: "Direct affirmation for anyone who sees it",
+                price: 25,
+                color: "#e8fff8"
+            },
+            {
+                id: 7,
+                title: "Anxiety Ally",
+                message: "it's okay to not be okay",
+                observerNote: "Normalize mental health struggles",
+                price: 25,
+                color: "#ffe8f8"
+            },
+            {
+                id: 8,
+                title: "Introvert Energy",
+                message: "social battery: currently recharging",
+                observerNote: "Gentle humor that creates understanding",
+                price: 25,
+                color: "#f8f8e8"
+            },
+            {
+                id: 9,
+                title: "Deep Feeler",
+                message: "sensitivity is strength",
+                observerNote: "Reframe emotional depth as a superpower",
+                price: 25,
+                color: "#e8e8ff"
+            },
+            {
+                id: 10,
+                title: "Human First",
+                message: "no extraction • humans over capital",
+                observerNote: "Political empathy in action",
+                price: 25,
+                color: "#f8ffe8"
+            }
+        ];
+        
+        // Ancient algo: Simple linear render
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            let html = '';
+            
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+                html += `
+                    <div class="product">
+                        <div class="tee-preview">
+                            <div class="tee-mockup" style="background: ${product.color};">
+                                ${product.message}
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${product.title}</div>
+                            <div class="message-preview">"${product.message}"</div>
+                            <div class="observer-note">${product.observerNote}</div>
+                            
+                            <div class="tier-options">
+                                <div class="tier standard-tier">
+                                    <div class="tier-label">STANDARD EMPATHIC</div>
+                                    <div class="tier-details">Fast delivery • Good quality</div>
+                                    <div class="tier-price">$${product.price}</div>
+                                    <button class="tier-btn" onclick="buyProduct(${product.id}, 'standard')">
+                                        Choose Standard
+                                    </button>
+                                </div>
+                                
+                                <div class="tier eco-tier">
+                                    <div class="tier-label">ECO-EMPATHIC PREMIUM ✨</div>
+                                    <div class="tier-details">100% organic • Plastic-free • Living wage</div>
+                                    <div class="tier-price">$${product.ecoPrice || product.price + 20}</div>
+                                    <button class="tier-btn eco-btn" onclick="buyProduct(${product.id}, 'eco')">
+                                        Choose Eco-Premium
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            grid.innerHTML = html;
+        }
+        
+        // Ancient algo: Simple purchase tracking
+        let sales = 0;
+        let revenue = 0;
+        
+        function buyProduct(productId, tier) {
+            // Find product (linear search - ancient and simple)
+            let product = null;
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].id === productId) {
+                    product = products[i];
+                    break;
+                }
+            }
+            
+            if (product) {
+                // Determine price based on tier
+                const price = tier === 'eco' ? (product.ecoPrice || product.price + 20) : product.price;
+                const tierName = tier === 'eco' ? 'ECO-EMPATHIC PREMIUM' : 'STANDARD EMPATHIC';
+                
+                // Simple checkout flow with tier info
+                alert(`Selected: ${tierName}\nPrice: $${price}\n\n${tier === 'eco' ? '✨ 100% organic cotton, plastic-free packaging, living wage production' : '⚡ Fast delivery, good quality'}`);
+                
+                const size = prompt('Size? (S/M/L/XL)', 'M');
+                const email = prompt('Email for order confirmation:', '');
+                
+                if (size && email) {
+                    // Track sale (ancient increment)
+                    sales++;
+                    revenue += price;
+                    
+                    // Update display
+                    document.getElementById('salesCount').textContent = sales;
+                    document.getElementById('revenue').textContent = revenue;
+                    
+                    // Simple order processing
+                    processOrder(product, size, email, tier, price);
+                }
+            }
+        }
+        
+        function processOrder(product, size, email, tier, price) {
+            // Ancient algo: Create order object
+            const order = {
+                id: Date.now(), // Simple timestamp ID
+                product: product.title,
+                message: product.message,
+                size: size,
+                email: email,
+                price: price,
+                tier: tier, // 'standard' or 'eco'
+                tierName: tier === 'eco' ? 'ECO-EMPATHIC PREMIUM' : 'STANDARD EMPATHIC',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Send to backend (next step)
+            fetch('order.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Order confirmed! Check ${email} for details. Order #${order.id}`);
+                } else {
+                    alert('Order failed. Please try again.');
+                }
+            });
+        }
+        
+        // Initialize on page load
+        renderProducts();
+        
+        // Ancient algo: Simple countdown timer
+        let startTime = Date.now();
+        setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, 10800000 - elapsed); // 3 hours in ms
+            const hours = Math.floor(remaining / 3600000);
+            const minutes = Math.floor((remaining % 3600000) / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            
+            const countdownEl = document.querySelector('.countdown');
+            if (countdownEl) {
+                countdownEl.innerHTML = `TARGET: ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} | $20,000`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
