@@ -12,6 +12,8 @@
             background: #000;
             color: #fff;
             line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
         
         .header {
@@ -59,12 +61,14 @@
             border-radius: 10px;
             overflow: hidden;
             border: 2px solid #333;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
         }
         
         .product:hover {
             border-color: #4ecdc4;
-            transform: scale(1.02);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(78, 205, 196, 0.2);
         }
         
         .tee-preview {
@@ -230,7 +234,24 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tier-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tier-btn:hover:before {
+            left: 100%;
         }
         
         .eco-btn {
@@ -249,6 +270,28 @@
             margin-top: 3rem;
             color: #666;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .extreme-marketing {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #4ecdc4, #45b7a8);
+            color: white;
+            padding: 1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 999;
+            animation: pulse 3s infinite;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -259,7 +302,7 @@
     </div>
     
     <div class="mission-alert">
-        🚨 FRONTEND DEMO: EMPATHIC T-SHIRT CONCEPT 🚨
+        💖 LOVE CONNECTS LOVE: EMPATHY FOR ALL 💖
     </div>
     
     <div class="header">
@@ -274,6 +317,10 @@
     <div class="footer">
         <p>NO GODS • NO MASTERS • EMPATHIC REBELS</p>
         <p>Made with ancient algorithms and love</p>
+    </div>
+    
+    <div class="extreme-marketing" onclick="window.scrollTo(0,0)">
+        💖 LOVE GIVES YOU WINGS • NO EXTRACTION
     </div>
     
     <script>
@@ -427,11 +474,8 @@
                 const price = tier === 'eco' ? (product.ecoPrice || product.price + 20) : product.price;
                 const tierName = tier === 'eco' ? 'ECO-EMPATHIC PREMIUM' : 'STANDARD EMPATHIC';
                 
-                // Simple checkout flow with tier info
-                alert(`Selected: ${tierName}\nPrice: $${price}\n\n${tier === 'eco' ? '✨ 100% organic cotton, plastic-free packaging, living wage production' : '⚡ Fast delivery, good quality'}`);
-                
-                const size = prompt('Size? (S/M/L/XL)', 'M');
-                const email = prompt('Email for order confirmation:', '');
+                // Porsche emotional experience
+                showPremiumCheckout(product, tier, price, tierName);
                 
                 if (size && email) {
                     // Track sale (ancient increment)
@@ -478,6 +522,93 @@
                 // Demo mode - simulate success
                 alert(`Demo Order Created! Order #${order.id}\n\nThis is a frontend demonstration.\nConnect to your backend API for real orders.`);
             });
+        }
+        
+        // Porsche emotional checkout experience
+        function showPremiumCheckout(product, tier, price, tierName) {
+            const checkoutHtml = `
+                <div id="premium-checkout" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.95); z-index: 10000;
+                    display: flex; align-items: center; justify-content: center;
+                    animation: fadeIn 0.3s ease;
+                ">
+                    <div style="
+                        background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+                        padding: 3rem; border-radius: 20px;
+                        max-width: 500px; width: 90%;
+                        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+                        text-align: center; color: white;
+                        border: 1px solid #4ecdc4;
+                    ">
+                        <div style="font-size: 2rem; margin-bottom: 1rem; color: #4ecdc4;">✨</div>
+                        <h2 style="margin-bottom: 1rem; color: #4ecdc4;">${product.title}</h2>
+                        <p style="font-style: italic; margin-bottom: 2rem; color: #ccc;">\"${product.message}\"</p>
+                        
+                        <div style="background: rgba(78,205,196,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 2rem;">
+                            <h3 style="color: #4ecdc4; margin-bottom: 0.5rem;">${tierName}</h3>
+                            <p style="color: #ccc; font-size: 0.9rem;">${tier === 'eco' ? '100% organic • Plastic-free • Living wage' : 'Fast delivery • Premium quality'}</p>
+                            <div style="font-size: 2rem; font-weight: bold; color: white; margin-top: 1rem;">$${price}</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 2rem;">
+                            <p style="color: #4ecdc4; margin-bottom: 1rem;">Choose your size:</p>
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="selectSize('S')" class="size-btn" data-size="S">S</button>
+                                <button onclick="selectSize('M')" class="size-btn selected" data-size="M">M</button>
+                                <button onclick="selectSize('L')" class="size-btn" data-size="L">L</button>
+                                <button onclick="selectSize('XL')" class="size-btn" data-size="XL">XL</button>
+                            </div>
+                        </div>
+                        
+                        <input type="email" id="checkout-email" placeholder="Email for confirmation" style="
+                            width: 100%; padding: 1rem; margin-bottom: 2rem;
+                            background: rgba(255,255,255,0.1); border: 1px solid #333;
+                            border-radius: 8px; color: white; font-size: 1rem;
+                        " />
+                        
+                        <div style="display: flex; gap: 1rem;">
+                            <button onclick="closePremiumCheckout()" style="
+                                flex: 1; padding: 1rem; background: #333; color: white;
+                                border: none; border-radius: 8px; cursor: pointer;
+                            ">Cancel</button>
+                            <button onclick="completePurchase()" style="
+                                flex: 2; padding: 1rem; 
+                                background: linear-gradient(45deg, #4ecdc4, #45b7a8);
+                                color: black; border: none; border-radius: 8px;
+                                font-weight: bold; cursor: pointer; font-size: 1.1rem;
+                            ">Complete Your Empathic Purchase</button>
+                        </div>
+                        
+                        <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">You're about to spread empathy into the world ✨</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', checkoutHtml);
+            window.currentCheckout = { product, tier, price, tierName, selectedSize: 'M' };
+        }
+        
+        function selectSize(size) {
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelector(`[data-size="${size}"]`).classList.add('selected');
+            window.currentCheckout.selectedSize = size;
+        }
+        
+        function closePremiumCheckout() {
+            document.getElementById('premium-checkout')?.remove();
+        }
+        
+        function completePurchase() {
+            const email = document.getElementById('checkout-email').value;
+            if (!email) {
+                alert('Please enter your email for order confirmation');
+                return;
+            }
+            
+            const checkout = window.currentCheckout;
+            processOrder(checkout.product, checkout.selectedSize, email, checkout.tier, checkout.price);
+            closePremiumCheckout();
         }
         
         // Initialize on page load
