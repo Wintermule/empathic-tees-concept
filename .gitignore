@@ -1,0 +1,11 @@
+# SECURITY - NEVER COMMIT THESE
+*.php
+*config*
+orders.json
+orders.log
+payments.log
+fulfillment.log
+*.key
+*.pem
+vServer*
+.env
