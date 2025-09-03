@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="productTitle">Product Details - Empathic Tees</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <link rel="canonical" href="https://loveconnects.love">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(76, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            color: #4ecdc4;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: rgba(76, 205, 196, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 205, 196, 0.3);
+        }
+        
+        .product-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+        }
+        
+        .product-card {
+            max-width: 900px;
+            margin: 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .product-visual {
+            height: 300px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #000;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23000" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23000" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="%23000" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .product-content {
+            padding: 3rem;
+        }
+        
+        .product-title {
+            font-size: 2.5rem;
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .product-message {
+            font-size: 1.3rem;
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-style: italic;
+            line-height: 1.8;
+        }
+        
+        .product-description {
+            background: rgba(255,255,255,0.03);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .pricing-tier {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+        
+        .pricing-tier:hover {
+            border-color: #4ecdc4;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(76, 205, 196, 0.2);
+        }
+        
+        .pricing-tier.selected {
+            border-color: #4ecdc4;
+            background: rgba(76, 205, 196, 0.1);
+        }
+        
+        .tier-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tier-price {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        
+        .tier-features {
+            list-style: none;
+            color: #ccc;
+        }
+        
+        .tier-features li {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+        
+        .tier-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        
+        .size-selector {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .size-selector h3 {
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        .size-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .size-btn {
+            padding: 1.2rem 0.8rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: bold;
+            text-align: center;
+            font-family: inherit;
+        }
+        
+        .size-btn:hover {
+            border-color: #4ecdc4;
+            background: rgba(76, 205, 196, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .size-btn.selected {
+            border-color: #4ecdc4;
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ecdc4;
+        }
+        
+        .size-label {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            display: block;
+            margin-top: 0.2rem;
+        }
+        
+        .buy-button {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            border: none;
+            color: #000;
+            padding: 1.5rem 3rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: block;
+            margin: 2rem auto;
+            font-family: inherit;
+            min-width: 200px;
+        }
+        
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(76, 205, 196, 0.4);
+        }
+        
+        .buy-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .empathy-note {
+            background: rgba(255, 59, 48, 0.1);
+            border-left: 4px solid #ff3b30;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            font-style: italic;
+        }
+        
+        .legal-links {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .legal-links a {
+            color: #4ecdc4;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .product-card {
+                margin: 1rem;
+            }
+            
+            .product-content {
+                padding: 2rem;
+            }
+            
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back to Store</a>
+    
+    <div class="product-hero">
+        <div class="product-card">
+            <div class="product-visual" id="productVisual">
+                EMPATHIC
+            </div>
+            
+            <div class="product-content">
+                <h1 class="product-title" id="productName">Loading...</h1>
+                <p class="product-message" id="productMessage">Loading message...</p>
+                
+                <div class="product-description">
+                    <h3 style="color: #4ecdc4; margin-bottom: 1rem;">About This Design</h3>
+                    <p id="productDesc">This empathic t-shirt carries a message designed not for you, but for those who observe you. Each design is crafted to evoke specific emotions and human connections in a world that often feels disconnected.</p>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <h4 style="color: #ccc; margin-bottom: 0.5rem;">Materials & Ethics:</h4>
+                        <ul style="color: #aaa; margin-left: 1rem;">
+                            <li>100% plastic-free materials across all tiers</li>
+                            <li>Ethically sourced cotton and organic blends</li>
+                            <li>Print-on-demand to reduce waste</li>
+                            <li>Support for the Gentree Humanity Fund</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="empathy-note">
+                    💖 <strong>Synesthetic Design:</strong> Our colors and layouts are carefully chosen to avoid 
+                    sensory overload. No dark patterns, no manipulation - just honest human connection.
+                </div>
+                
+                <h3 style="color: #ccc; margin-bottom: 1rem; text-align: center;">Choose Your Impact Level</h3>
+                <div class="pricing-grid">
+                    <div class="pricing-tier" onclick="selectTier('budget', 18)">
+                        <div class="tier-name">Budget Empathy</div>
+                        <div class="tier-price">$18</div>
+                        <ul class="tier-features">
+                            <li>High-quality printing</li>
+                            <li>Eco-friendly when possible</li>
+                            <li>Cotton blend</li>
+                            <li>Standard shipping</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="pricing-tier selected" onclick="selectTier('standard', 25)">
+                        <div class="tier-name">Standard Empathy</div>
+                        <div class="tier-price">$25</div>
+                        <ul class="tier-features">
+                            <li>Premium printing quality</li>
+                            <li>Sustainable materials</li>
+                            <li>Organic cotton blend</li>
+                            <li>Expedited processing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="pricing-tier" onclick="selectTier('premium', 45)">
+                        <div class="tier-name">Eco-Premium</div>
+                        <div class="tier-price">$45</div>
+                        <ul class="tier-features">
+                            <li>Highest quality printing</li>
+                            <li>100% organic materials</li>
+                            <li>Carbon-neutral shipping</li>
+                            <li>Priority processing</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="size-selector">
+                    <h3>Choose Your Size</h3>
+                    <div class="size-buttons">
+                        <button class="size-btn" onclick="selectSize('S')" data-size="S">
+                            S<span class="size-label">Small</span>
+                        </button>
+                        <button class="size-btn selected" onclick="selectSize('M')" data-size="M">
+                            M<span class="size-label">Medium</span>
+                        </button>
+                        <button class="size-btn" onclick="selectSize('L')" data-size="L">
+                            L<span class="size-label">Large</span>
+                        </button>
+                        <button class="size-btn" onclick="selectSize('XL')" data-size="XL">
+                            XL<span class="size-label">X-Large</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="buy-button" onclick="proceedToCheckout()" id="buyButton">
+                    Add Empathy to Cart - $25
+                </button>
+                
+                <div class="legal-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                    <a href="impressum.html">Impressum</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 0;
+        
+        // Product data (matches main store)
+        const products = [
+            {
+                title: "They See Your Heart",
+                message: "When observers look at you, they'll feel the warmth of human connection - a gentle reminder that beneath all our complexities, we're fundamentally the same.",
+                description: "A subtle design that radiates empathy outward. This shirt doesn't shout - it whispers to the hearts of strangers, creating micro-moments of connection in everyday encounters."
+            },
+            {
+                title: "Quiet Strength Speaks",
+                message: "Your presence becomes a calm anchor for others - they'll feel grounded just being near someone who embodies gentle confidence without ego.",
+                description: "For those who lead through example rather than words. This design emanates quiet power that makes others feel safe to be vulnerable and authentic."
+            },
+            {
+                title: "Permission to Feel",
+                message: "Others will sense they can lower their guard around you - creating space for authentic emotion in a world that often demands artificial positivity.",
+                description: "A revolutionary concept: clothing that gives others permission to be human. Observers feel invited to express their true feelings without judgment."
+            },
+            {
+                title: "Bridge Between Worlds",
+                message: "You become a connector - people will feel drawn to share stories, knowing you hold space for both their light and their shadows with equal grace.",
+                description: "This design creates an invisible bridge between strangers. Observers sense you're someone who truly listens, transforming you into a natural magnet for meaningful conversations."
+            },
+            {
+                title: "Gentle Revolution",
+                message: "Your quiet rebellion against superficiality will inspire others to choose depth over surface, connection over transaction, humanity over productivity.",
+                description: "The most powerful revolutions start with individual acts of authentic being. This shirt signals your commitment to human values in an increasingly digital world."
+            },
+            {
+                title: "Safe Harbor Energy",
+                message: "You emanate the feeling of 'home' to strangers - they'll feel mysteriously comforted, like finding shelter in an unexpected storm.",
+                description: "Some people have the gift of making others feel instantly at peace. This design amplifies that natural sanctuary energy, creating calm in chaotic spaces."
+            },
+            {
+                title: "Truth Without Judgment",
+                message: "Others will feel they can be honest around you - your presence suggests someone who values authenticity over politeness, depth over small talk.",
+                description: "In a world full of performance, you become a space where masks can come off. Observers sense you won't judge their imperfections or struggles."
+            },
+            {
+                title: "Hope Carrier",
+                message: "Your energy will plant seeds of possibility in others - they'll leave encounters with you feeling like better days are not just possible, but inevitable.",
+                description: "Hope is contagious when carried authentically. This design helps you become a source of gentle optimism that others can feel without you saying a word."
+            },
+            {
+                title: "Mirror of Worth",
+                message: "People will see their own value reflected in how you treat them - your presence reminds them they matter, just by being human.",
+                description: "The rarest gift: making others feel worthy simply through your way of being. This shirt helps amplify your natural ability to see and honor the divine in everyone."
+            },
+            {
+                title: "Ancient Wisdom, Modern Heart",
+                message: "Others will sense you carry old soul wisdom in a young world - they'll feel connected to something timeless and true in your presence.",
+                description: "For those who remember what matters most. This design bridges ancient wisdom with contemporary compassion, helping others reconnect with timeless human values."
+            }
+        ];
+        
+        let selectedTier = 'standard';
+        let selectedPrice = 25;
+        let selectedSize = 'M';
+        
+        // Load product details
+        function loadProduct() {
+            const product = products[productId] || products[0];
+            
+            document.getElementById('productName').textContent = product.title;
+            document.getElementById('productMessage').textContent = product.message;
+            document.getElementById('productDesc').textContent = product.description;
+            document.getElementById('productTitle').textContent = `${product.title} - Empathic Tees`;
+        }
+        
+        // Tier selection
+        function selectTier(tier, price) {
+            selectedTier = tier;
+            selectedPrice = price;
+            
+            // Update visual selection
+            document.querySelectorAll('.pricing-tier').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.pricing-tier').classList.add('selected');
+            
+            // Update button
+            document.getElementById('buyButton').textContent = `Add Empathy to Cart - $${price}`;
+        }
+        
+        // Size selection
+        function selectSize(size) {
+            selectedSize = size;
+            
+            // Update visual selection
+            document.querySelectorAll('.size-btn').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-size="${size}"]`).classList.add('selected');
+        }
+        
+        // Proceed to checkout
+        function proceedToCheckout() {
+            const product = products[productId] || products[0];
+            
+            // Store selection in sessionStorage for checkout
+            sessionStorage.setItem('checkoutData', JSON.stringify({
+                product: product,
+                tier: selectedTier,
+                price: selectedPrice,
+                size: selectedSize
+            }));
+            
+            // Return to main store for checkout
+            window.location.href = 'index.html?checkout=true';
+        }
+        
+        // Initialize
+        loadProduct();
+    </script>
+</body>
+</html>

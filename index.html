@@ -4,6 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empathic Tees - The Human Collection</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- No Tracking -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow, noarchive">
+    
+    <!-- Empathic SEO -->
+    <meta name="description" content="Empathic t-shirts with messages for observers to feel something. Plastic-free, ethical, made for humans not capital. NO GODS • NO MASTERS • NO EXTRACTION">
+    <meta name="keywords" content="empathic clothing, sustainable t-shirts, plastic-free apparel, ethical fashion, synesthetic design">
+    
+    <!-- Social Meta (Privacy-Respecting) -->
+    <meta property="og:title" content="Empathic Tees - Clothing That Makes Observers Feel">
+    <meta property="og:description" content="Plastic-free empathic t-shirts. Messages designed for observers, not wearers. Support the Gentree Humanity Fund.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://loveconnects.love">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://js.stripe.com">
+    <link rel="preconnect" href="https://www.paypal.com">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://loveconnects.love">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -405,6 +433,22 @@
                             <div class="message-preview">"${product.message}"</div>
                             <div class="observer-note">${product.observerNote}</div>
                             
+                            <div style="text-align: center; margin: 1rem 0;">
+                                <button onclick="viewProduct(${i})" style="
+                                    background: rgba(76, 205, 196, 0.1); 
+                                    border: 2px solid #4ecdc4; 
+                                    color: #4ecdc4; 
+                                    padding: 0.8rem 1.5rem; 
+                                    border-radius: 12px; 
+                                    cursor: pointer; 
+                                    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                    font-weight: bold;
+                                    font-family: inherit;
+                                ">
+                                    View Full Details
+                                </button>
+                            </div>
+                            
                             <div class="tier-options">
                                 <div class="tier standard-tier">
                                     <div class="tier-label">STANDARD EMPATHIC</div>
@@ -435,6 +479,11 @@
         // Ancient algo: Simple purchase tracking
         let sales = 0;
         let revenue = 0;
+        
+        // Navigate to product detail page
+        function viewProduct(index) {
+            window.location.href = `product-detail.html?id=${index}`;
+        }
         
         function buyProduct(productId, tier) {
             // Find product (linear search - ancient and simple)
@@ -529,12 +578,33 @@
                         </div>
                         
                         <div style="margin-bottom: 2rem;">
-                            <p style="color: #4ecdc4; margin-bottom: 1rem;">Choose your size:</p>
-                            <div style="display: flex; gap: 10px; justify-content: center;">
-                                <button onclick="selectSize('S')" class="size-btn" data-size="S">S</button>
-                                <button onclick="selectSize('M')" class="size-btn selected" data-size="M">M</button>
-                                <button onclick="selectSize('L')" class="size-btn" data-size="L">L</button>
-                                <button onclick="selectSize('XL')" class="size-btn" data-size="XL">XL</button>
+                            <p style="color: #4ecdc4; margin-bottom: 1rem; text-align: center;">Choose your size:</p>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; max-width: 350px; margin: 0 auto;">
+                                <button onclick="selectSize('S')" class="premium-size-btn" data-size="S" style="
+                                    padding: 1.2rem 0.8rem; background: rgba(255,255,255,0.05);
+                                    border: 2px solid #333; color: white; border-radius: 12px;
+                                    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                    font-weight: bold; text-align: center; position: relative;
+                                ">S<br><small style="font-size: 0.7rem; opacity: 0.6;">Small</small></button>
+                                <button onclick="selectSize('M')" class="premium-size-btn size-selected" data-size="M" style="
+                                    padding: 1.2rem 0.8rem; background: rgba(78,205,196,0.2);
+                                    border: 2px solid #4ecdc4; color: white; border-radius: 12px;
+                                    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                    font-weight: bold; text-align: center; position: relative;
+                                    box-shadow: 0 0 15px rgba(78,205,196,0.4);
+                                ">M<br><small style="font-size: 0.7rem; opacity: 0.8;">Medium</small></button>
+                                <button onclick="selectSize('L')" class="premium-size-btn" data-size="L" style="
+                                    padding: 1.2rem 0.8rem; background: rgba(255,255,255,0.05);
+                                    border: 2px solid #333; color: white; border-radius: 12px;
+                                    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                    font-weight: bold; text-align: center; position: relative;
+                                ">L<br><small style="font-size: 0.7rem; opacity: 0.6;">Large</small></button>
+                                <button onclick="selectSize('XL')" class="premium-size-btn" data-size="XL" style="
+                                    padding: 1.2rem 0.8rem; background: rgba(255,255,255,0.05);
+                                    border: 2px solid #333; color: white; border-radius: 12px;
+                                    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                    font-weight: bold; text-align: center; position: relative;
+                                ">XL<br><small style="font-size: 0.7rem; opacity: 0.6;">X-Large</small></button>
                             </div>
                         </div>
                         
@@ -685,6 +755,24 @@
         // Initialize on page load
         renderProducts();
         
+        // Handle checkout from product detail page
+        if (window.location.search.includes('checkout=true')) {
+            const checkoutData = sessionStorage.getItem('checkoutData');
+            if (checkoutData) {
+                const data = JSON.parse(checkoutData);
+                setTimeout(() => {
+                    openPremiumCheckout(data.product, data.price, data.tier);
+                    // Pre-select size
+                    if (data.size) {
+                        setTimeout(() => {
+                            selectSize(data.size);
+                        }, 100);
+                    }
+                }, 500);
+                sessionStorage.removeItem('checkoutData');
+            }
+        }
+        
         // Gentle stats update
         setInterval(() => {
             const statsEl = document.querySelector('.stats-bar');
@@ -694,5 +782,23 @@
             }
         }, 1000);
     </script>
+    
+    <!-- Legal Footer -->
+    <footer style="background: #111; border-top: 1px solid #333; padding: 2rem; text-align: center; margin-top: 3rem;">
+        <div style="color: #666; font-size: 0.9rem;">
+            <div style="margin-bottom: 1rem;">
+                <span style="color: #4ecdc4;">💖</span> Made with love for humans, not capital
+                <span style="color: #4ecdc4;">💖</span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="impressum.html" style="color: #ccc; text-decoration: none; transition: color 0.3s;">Impressum</a>
+                <a href="privacy.html" style="color: #ccc; text-decoration: none; transition: color 0.3s;">Privacy Policy</a>
+                <a href="terms.html" style="color: #ccc; text-decoration: none; transition: color 0.3s;">Terms & Conditions</a>
+            </div>
+            <div style="margin-top: 1rem; font-size: 0.8rem; color: #555;">
+                NO GODS • NO MASTERS • NO EXTRACTION
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
