@@ -546,14 +546,18 @@
                         
                         <div style="margin-bottom: 1rem;">
                             <p style="color: #4ecdc4; margin-bottom: 1rem; text-align: center;">Choose your payment method:</p>
-                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
                                 <button onclick="selectPayment('card')" class="payment-btn selected" data-payment="card" style="
-                                    flex: 1; padding: 0.8rem; background: rgba(78,205,196,0.2);
-                                    border: 2px solid #4ecdc4; color: white; border-radius: 8px; cursor: pointer;
+                                    padding: 0.8rem; background: rgba(78,205,196,0.2);
+                                    border: 2px solid #4ecdc4; color: white; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
                                 ">💳 Card</button>
+                                <button onclick="selectPayment('paypal')" class="payment-btn" data-payment="paypal" style="
+                                    padding: 0.8rem; background: rgba(255,255,255,0.1);
+                                    border: 2px solid #333; color: white; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+                                ">🔵 PayPal</button>
                                 <button onclick="selectPayment('bitcoin')" class="payment-btn" data-payment="bitcoin" style="
-                                    flex: 1; padding: 0.8rem; background: rgba(255,255,255,0.1);
-                                    border: 2px solid #333; color: white; border-radius: 8px; cursor: pointer;
+                                    padding: 0.8rem; background: rgba(255,255,255,0.1);
+                                    border: 2px solid #333; color: white; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
                                 ">₿ Bitcoin</button>
                             </div>
                         </div>
@@ -616,6 +620,8 @@
             
             if (checkout.paymentMethod === 'bitcoin') {
                 processBitcoinOrder(checkout, email);
+            } else if (checkout.paymentMethod === 'paypal') {
+                processPayPalOrder(checkout, email);
             } else {
                 processOrder(checkout.product, checkout.selectedSize, email, checkout.tier, checkout.price);
             }
@@ -641,6 +647,33 @@
             
             // Show Bitcoin payment details
             alert(`Bitcoin Payment Order #${order.id}\n\nAmount: ${btcAmount} BTC (≈$${checkout.price})\n\nSend Bitcoin to:\nbc1q5p8zg7eml6kvn2s2k2mat2mtfk5zua90ghvq3f\n\nOnce payment is confirmed, your empathic tee will be printed!\n\nThank you for supporting the Gentree Humanity Fund! 💖`);
+            
+            // Track the order
+            sales++;
+            revenue += checkout.price;
+            document.getElementById('salesCount').textContent = sales;
+            document.getElementById('revenue').textContent = revenue;
+        }
+        
+        function processPayPalOrder(checkout, email) {
+            // PayPal payment flow
+            const order = {
+                id: Date.now(),
+                product: checkout.product.title,
+                message: checkout.product.message,
+                size: checkout.selectedSize,
+                email: email,
+                price: checkout.price,
+                tier: checkout.tier,
+                paymentMethod: 'paypal',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Show PayPal payment flow
+            alert(`PayPal Order #${order.id}\n\nAmount: $${checkout.price}\n\nYou'll be redirected to PayPal to complete payment.\n\nOnce confirmed, your empathic tee will be printed!\n\nThank you for supporting the Gentree Humanity Fund! 💖`);
+            
+            // In production: window.open PayPal checkout URL
+            // window.open(`https://paypal.com/checkout?amount=${checkout.price}&item=${encodeURIComponent(checkout.product.title)}`);
             
             // Track the order
             sales++;
