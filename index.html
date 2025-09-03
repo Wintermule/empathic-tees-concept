@@ -42,10 +42,6 @@
             animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
         
         .products {
             display: grid;
@@ -276,33 +272,17 @@
             to { opacity: 1; transform: scale(1); }
         }
         
-        .extreme-marketing {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #4ecdc4, #45b7a8);
-            color: white;
-            padding: 1rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            z-index: 999;
-            animation: pulse 3s infinite;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
     <div class="stats-bar">
         <span class="stat">SALES: <span id="salesCount">0</span></span>
         <span class="stat">REVENUE: $<span id="revenue">0</span></span>
-        <span class="stat countdown">TARGET: 3:00:00 | $20,000</span>
+        <span class="stat" style="color: #4ecdc4;">Empathic Messages Available</span>
     </div>
     
-    <div class="mission-alert">
-        💖 LOVE CONNECTS LOVE: EMPATHY FOR ALL 💖
+    <div class="welcome-message" style="background: rgba(78,205,196,0.1); padding: 1rem; text-align: center; color: #4ecdc4; border: none;">
+        💖 Messages that help strangers feel safe around you 💖
     </div>
     
     <div class="header">
@@ -319,9 +299,6 @@
         <p>Made with ancient algorithms and love</p>
     </div>
     
-    <div class="extreme-marketing" onclick="window.scrollTo(0,0)">
-        💖 LOVE GIVES YOU WINGS • NO EXTRACTION
-    </div>
     
     <script>
         // Ancient product catalog - no frameworks, pure JS
@@ -577,10 +554,10 @@
                                 background: linear-gradient(45deg, #4ecdc4, #45b7a8);
                                 color: black; border: none; border-radius: 8px;
                                 font-weight: bold; cursor: pointer; font-size: 1.1rem;
-                            ">Complete Your Empathic Purchase</button>
+                            ">Place Order (No Rush)</button>
                         </div>
                         
-                        <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">You're about to spread empathy into the world ✨</p>
+                        <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">Take your time deciding. No pressure. 💖</p>
                     </div>
                 </div>
             `;
@@ -602,7 +579,9 @@
         function completePurchase() {
             const email = document.getElementById('checkout-email').value;
             if (!email) {
-                alert('Please enter your email for order confirmation');
+                const emailInput = document.getElementById('checkout-email');
+                emailInput.style.border = '1px solid #4ecdc4';
+                emailInput.focus();
                 return;
             }
             
@@ -614,18 +593,12 @@
         // Initialize on page load
         renderProducts();
         
-        // Ancient algo: Simple countdown timer
-        let startTime = Date.now();
+        // Gentle stats update
         setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const remaining = Math.max(0, 10800000 - elapsed); // 3 hours in ms
-            const hours = Math.floor(remaining / 3600000);
-            const minutes = Math.floor((remaining % 3600000) / 60000);
-            const seconds = Math.floor((remaining % 60000) / 1000);
-            
-            const countdownEl = document.querySelector('.countdown');
-            if (countdownEl) {
-                countdownEl.innerHTML = `TARGET: ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} | $20,000`;
+            const statsEl = document.querySelector('.stats-bar');
+            if (statsEl) {
+                const time = new Date().toLocaleTimeString();
+                // Just show time, no pressure
             }
         }, 1000);
     </script>
