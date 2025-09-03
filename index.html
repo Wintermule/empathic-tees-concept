@@ -544,6 +544,20 @@
                             border-radius: 8px; color: white; font-size: 1rem;
                         " />
                         
+                        <div style="margin-bottom: 1rem;">
+                            <p style="color: #4ecdc4; margin-bottom: 1rem; text-align: center;">Choose your payment method:</p>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <button onclick="selectPayment('card')" class="payment-btn selected" data-payment="card" style="
+                                    flex: 1; padding: 0.8rem; background: rgba(78,205,196,0.2);
+                                    border: 2px solid #4ecdc4; color: white; border-radius: 8px; cursor: pointer;
+                                ">💳 Card</button>
+                                <button onclick="selectPayment('bitcoin')" class="payment-btn" data-payment="bitcoin" style="
+                                    flex: 1; padding: 0.8rem; background: rgba(255,255,255,0.1);
+                                    border: 2px solid #333; color: white; border-radius: 8px; cursor: pointer;
+                                ">₿ Bitcoin</button>
+                            </div>
+                        </div>
+                        
                         <div style="display: flex; gap: 1rem;">
                             <button onclick="closePremiumCheckout()" style="
                                 flex: 1; padding: 1rem; background: #333; color: white;
@@ -563,13 +577,26 @@
             `;
             
             document.body.insertAdjacentHTML('beforeend', checkoutHtml);
-            window.currentCheckout = { product, tier, price, tierName, selectedSize: 'M' };
+            window.currentCheckout = { product, tier, price, tierName, selectedSize: 'M', paymentMethod: 'card' };
         }
         
         function selectSize(size) {
             document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
             document.querySelector(`[data-size="${size}"]`).classList.add('selected');
             window.currentCheckout.selectedSize = size;
+        }
+        
+        function selectPayment(method) {
+            document.querySelectorAll('.payment-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.style.background = 'rgba(255,255,255,0.1)';
+                btn.style.borderColor = '#333';
+            });
+            const selected = document.querySelector(`[data-payment="${method}"]`);
+            selected.classList.add('selected');
+            selected.style.background = 'rgba(78,205,196,0.2)';
+            selected.style.borderColor = '#4ecdc4';
+            window.currentCheckout.paymentMethod = method;
         }
         
         function closePremiumCheckout() {
@@ -586,8 +613,40 @@
             }
             
             const checkout = window.currentCheckout;
-            processOrder(checkout.product, checkout.selectedSize, email, checkout.tier, checkout.price);
+            
+            if (checkout.paymentMethod === 'bitcoin') {
+                processBitcoinOrder(checkout, email);
+            } else {
+                processOrder(checkout.product, checkout.selectedSize, email, checkout.tier, checkout.price);
+            }
+            
             closePremiumCheckout();
+        }
+        
+        function processBitcoinOrder(checkout, email) {
+            // Bitcoin payment flow
+            const btcAmount = (checkout.price / 45000).toFixed(8); // Rough BTC conversion
+            const order = {
+                id: Date.now(),
+                product: checkout.product.title,
+                message: checkout.product.message,
+                size: checkout.selectedSize,
+                email: email,
+                price: checkout.price,
+                tier: checkout.tier,
+                paymentMethod: 'bitcoin',
+                btcAmount: btcAmount,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Show Bitcoin payment details
+            alert(`Bitcoin Payment Order #${order.id}\n\nAmount: ${btcAmount} BTC (≈$${checkout.price})\n\nSend Bitcoin to:\nbc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh\n\n(Demo address - replace with real one)\n\nOnce payment is confirmed, your empathic tee will be printed!`);
+            
+            // Track the order
+            sales++;
+            revenue += checkout.price;
+            document.getElementById('salesCount').textContent = sales;
+            document.getElementById('revenue').textContent = revenue;
         }
         
         // Initialize on page load
